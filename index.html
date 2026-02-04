@@ -1,0 +1,77 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linet's Business System</title>
+    <style>
+        body { font-family: Arial; background:#f4f4f4; padding:20px; }
+        h2 { color:#333; }
+        form { background:white; padding:15px; margin-bottom:20px; }
+        table { width:100%; background:white; border-collapse:collapse; }
+        th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+        button { padding:8px 15px; }
+    </style>
+</head>
+<body>
+
+<h1>Linet's Products Stock & Sales System</h1>
+
+<!-- ADD PRODUCT -->
+<h2>Add Product</h2>
+<form method="POST">
+    Name: <input type="text" name="name" required>
+    Cost Price: <input type="number" name="cost" required>
+    Selling Price: <input type="number" name="sell" required>
+    Stock: <input type="number" name="stock" required>
+    <button type="submit" name="add_product">Add</button>
+</form>
+
+<!-- RECORD SALE -->
+<h2>Record Sale</h2>
+<form method="POST">
+    Product:
+    <select name="product_id">
+        <?php while ($p = $products->fetch_assoc()) { ?>
+            <option value="<?= $p['id'] ?>">
+                <?= $p['name'] ?> (Stock: <?= $p['stock'] ?>)
+            </option>
+        <?php } ?>
+    </select>
+    Quantity: <input type="number" name="quantity" required>
+    <button type="submit" name="record_sale">Sell</button>
+</form>
+
+<!-- STOCK TABLE -->
+<h2>Current Stock</h2>
+<table>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Cost Price</th>
+    <th>Selling Price</th>
+    <th>Stock</th>
+</tr>
+
+<?php
+$products = $conn->query("SELECT * FROM products");
+while ($row = $products->fetch_assoc()) {
+?>
+<tr>
+    <td><?= $row['id'] ?></td>
+    <td><?= $row['name'] ?></td>
+    <td><?= $row['cost_price'] ?></td>
+    <td><?= $row['selling_price'] ?></td>
+    <td><?= $row['stock'] ?></td>
+</tr>
+<?php } ?>
+</table>
+
+<!-- PROFIT & LOSS -->
+<h2>Profit & Loss Summary</h2>
+<p><strong>Total Sales:</strong> <?= $total_sales ?></p>
+<p><strong>Total Cost:</strong> <?= $total_cost ?></p>
+<p><strong>Profit / Loss:</strong> <?= $profit ?></p>
+
+</body>
+</html>
